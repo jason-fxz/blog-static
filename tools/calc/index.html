@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({"extensions":["tex2jax.js"],"jax":["input/TeX","output/HTML-CSS"],"messageStyle":"none","tex2jax":{"processEnvironments":false,"processEscapes":true,"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"TeX":{"extensions":["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]},"HTML-CSS":{"availableFonts":["TeX"]}});
+    </script>
+    <script
+      type="text/javascript"
+      async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"
+    ></script>
+    <script>
+      function max(a, b) {
+        return a < b ? b : a;
+      }
+      function min(a, b) {
+        return a < b ? a : b;
+      }
+      function gcd(a, b) {
+        return b ? gcd(b, a % b) : a;
+      }
+      window.onload = () => {
+        let fenjie = document.getElementById("fenjie-n");
+        if (fenjie != null) {
+          fenjie.addEventListener("input", calc_fenjie);
+        }
+        let powers = [
+          document.getElementById("power-a"),
+          document.getElementById("power-b"),
+          document.getElementById("power-p"),
+        ];
+        if (powers[0] != null) {
+          powers.forEach((v) => {
+            v.addEventListener("input", calc_power);
+          });
+        }
+        let phi = document.getElementById("phi-n");
+        if (phi != null) phi.addEventListener("input", calc_phi);
+        let primitive_root = document.getElementById("primitive-root-p");
+        if (primitive_root != null)
+          primitive_root.addEventListener("input", calc_primitive_root);
+      };
+      function latex_reflesh_by_id(s) {
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, s]);
+      }
+      function real_fenjie(n) {
+        let res = new Array();
+        for (let i = 2; i * i <= n; i++) {
+          if (n % i == 0) {
+            res.push({ prime: i, count: 0 });
+            while (n % i == 0) {
+              res[res.length - 1].count++;
+              n /= i;
+            }
+          }
+        }
+        if (n > 1) {
+          res.push({ prime: n, count: 1 });
+        }
+        return res;
+      }
+      function phi(p) {
+        let v = real_fenjie(p);
+        let ans = 1;
+        v.forEach(({ prime, count }) => {
+          while (count-- > 1) ans *= prime;
+          ans *= prime - 1;
+        });
+        return ans;
+      }
+      function MODmultiply(a, b, p) {
+        return parseInt((BigInt(a) * BigInt(b)) % BigInt(p));
+        /*		a%=p,b%=p;
+                    let ans=0;
+                    for (;b;a=(a*2)%p,b>>>=1)
+                        if (b&1)
+                            ans=(ans+a)%p;
+                    return ans;*/
+      }
+      function MODpower(a, b, p) {
+        a %= p;
+        let ans = 1 % p;
+        for (; b; a = MODmultiply(a, a, p), b >>>= 1)
+          if (b & 1) ans = MODmultiply(ans, a, p);
+        return ans;
+      }
+      function real_calc_primitive_root(p) {
+        let res = new Array();
+        let Phi = phi(p);
+        let facp = real_fenjie(Phi);
+        for (let i = 1; i <= min(p - 1, 200); i++) {
+          if (gcd(i, p) != 1) continue;
+          let flag = true;
+          facp.forEach((v) => {
+            flag &= MODpower(i, Phi / v.prime, p) != 1;
+          });
+          if (flag) res.push(i);
+        }
+        return res;
+      }
+      function string_to_int(n, lb = 0, rb = 1e15) {
+        n = parseInt(n);
+        return lb <= n && n < rb ? n : NaN;
+      }
+      function factors_to_latex(res) {
+        let s = "";
+        res.forEach((v) => {
+          if (s != "") s += "\\times";
+          s += v.prime.toString();
+          if (v.count > 1) {
+            s += "^{" + v.count.toString() + "}";
+          }
+        });
+        return s;
+      }
+      function to_latex_sequence(res, bound = 1e5) {
+        if (res.length == 0) return "Empty";
+        let s = "";
+        let tmp = 0;
+        res.forEach((v) => {
+          if (s != "") (s += ","), tmp++;
+          if (tmp + v.toString().length > bound) (s += "\\\\"), (tmp = 0);
+          s += v.toString();
+          tmp += v.toString().length;
+        });
+        return s;
+      }
+      let resultword = "结果：";
+      function calc_fenjie() {
+        let n = document.getElementById("fenjie-n").value;
+        n = string_to_int(n, 1);
+        let res = document.getElementById("fenjie-ans");
+        if (isNaN(n) || n < 1) res.innerText = resultword;
+        else if (n == 1) res.innerText = resultword + "$1$";
+        else
+          res.innerText =
+            resultword + "$" + factors_to_latex(real_fenjie(n)) + "$";
+        latex_reflesh_by_id("fenjie-ans");
+      }
+      function calc_phi() {
+        let a = document.getElementById("phi-n").value;
+        let res = document.getElementById("phi-ans");
+        a = string_to_int(a, 1);
+        if (isNaN(a)) res.innerText = resultword;
+        else {
+          res.innerText = resultword + "$" + phi(a).toString() + "$";
+        }
+        latex_reflesh_by_id("phi-ans");
+      }
+      function calc_power() {
+        let a = document.getElementById("power-a").value;
+        let b = document.getElementById("power-b").value;
+        let p = document.getElementById("power-p").value;
+        let res = document.getElementById("power-ans");
+        a = string_to_int(a);
+        b = string_to_int(b);
+        p = string_to_int(p, 1);
+        if (isNaN(a) || isNaN(p)) res.innerText = resultword;
+        else {
+          if (isNaN(b)) b = max(0, phi(p) - 1);
+          res.innerText = resultword + "$" + MODpower(a, b, p).toString() + "$";
+        }
+        latex_reflesh_by_id("power-ans");
+      }
+      function calc_primitive_root() {
+        let p = document.getElementById("primitive-root-p").value;
+        let res = document.getElementById("primitive-root-ans");
+        p = string_to_int(p, 2, 1e10);
+        if (isNaN(p)) res.innerText = resultword;
+        else {
+          res.innerText =
+            resultword +
+            "$" +
+            to_latex_sequence(real_calc_primitive_root(p), 50) +
+            "$";
+        }
+        latex_reflesh_by_id("primitive-root-ans");
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      style="
+        border: 5px solid rgba(0, 128, 0, 1);
+        padding: 10px;
+        border-radius: 10px;
+      "
+    >
+      <h1
+        style="
+          color: rgba(0, 0, 255, 1);
+          text-shadow: -3px 3px 1px rgba(153, 199, 199, 1);
+        "
+      >
+        计 算 器
+      </h1>
+      <div
+        style="
+          border: 5px solid rgba(0, 0, 255, 1);
+          padding: 20px;
+          border-radius: 10px;
+        "
+      >
+        <h2>质因数分解 $(1\leq n &lt; 10 ^ {15}):$</h2>
+        输入 $n = $ <input id="fenjie-n" class="text-input" type="text" />
+        <br />
+        <div id="fenjie-ans" style="color: rgba(0, 0, 0, 1)">结果：</div>
+      </div>
+
+      <br />
+      <div
+        style="
+          border: 5px solid rgba(0, 0, 255, 1);
+          padding: 20px;
+          border-radius: 10px;
+        "
+      >
+        <h2>$\varphi(n)$ $(1\leq n &lt; 10 ^ {15}):$</h2>
+
+        输入 $n = $
+        <input id="phi-n" class="text-input" type="text" />
+
+        <br />
+        <div id="phi-ans" style="color: rgba(0, 0, 0, 1)">结果：</div>
+      </div>
+
+      <br />
+      <div
+        style="
+          border: 5px solid rgba(0, 0, 255, 1);
+          padding: 20px;
+          border-radius: 10px;
+        "
+      >
+        <h2>
+          快速幂 $(0\leq a,b &lt; p &lt; 10 ^ {15})$，默认 $b = \varphi(p)-1:$
+        </h2>
+
+        输入 $a = $ <input id="power-a" class="text-input" type="text" /> $,b =
+        $ <input id="power-b" class="text-input" type="text" /> $,p = $
+        <input id="power-p" class="text-input" type="text" />
+
+        <br />
+        <div id="power-ans" style="color: rgba(0, 0, 0, 1)">结果：</div>
+      </div>
+
+      <br />
+      <div
+        style="
+          border: 5px solid rgba(0, 0, 255, 1);
+          padding: 20px;
+          border-radius: 10px;
+        "
+      >
+        <h2>求 $p$ 的不超过 $200$ 的所有原根 $(2\leq p &lt; 10 ^ {10}):$</h2>
+
+        输入 $p = $
+        <input id="primitive-root-p" class="text-input" type="text" />
+
+        <br />
+        <div id="primitive-root-ans" style="color: rgba(0, 0, 0, 1)">
+          结果：
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
