@@ -1,21 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 加密|解密</title>
+    <title>Base64 加密、解密</title>
     <script src="./base64.js"></script>
+    <!-- MDUI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
+        integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous" />
+    <title>Hello, world!</title>
+    <!-- MDUI JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
+        integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
+        crossorigin="anonymous"></script>
     <script>
-
+        // alert(Base64.encode("ssss"))
+        function base64_encode() {
+            cl = document.getElementById("cleartext");
+            ci = document.getElementById("ciphertext");
+            ci.value = Base64.encode(cl.value)
+        }
+        function base64_decode() {
+            cl = document.getElementById("cleartext");
+            ci = document.getElementById("ciphertext");
+            if (Base64.isValid(ci.value)) {
+                cl.value = Base64.decode(ci.value)
+            } else {
+                mdui.alert("输入不合法！");
+            }
+        }
     </script>
 
 </head>
+
 <body>
     <div>
-        <form>
-            
-        </form>
+        <div class="mdui-container">
+
+            <div class="mdui-typo">
+                <h1>Base64 编码、解码</h1>
+                <div class="mdui-divider"></div>
+                <br />
+            </div>
+            <div class="mdui-textfield mdui-ripple">
+                <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="明文" id="cleartext"></textarea>
+            </div>
+            <div class="mdui-textfield mdui-ripple">
+                <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="密文" id="ciphertext"></textarea>
+            </div>
+            <div class="mdui-row-xs-2">
+                <div class="mdui-col">
+                    <button class="mdui-btn mdui-btn-block mdui-color-purple mdui-ripple mdui-btn-raised" onclick="base64_encode()">ENCODE</button>
+                </div>
+                <div class="mdui-col">
+                    <button class="mdui-btn mdui-btn-block mdui-color-purple mdui-ripple mdui-btn-raised" onclick="base64_decode()">DECODE</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+
 </html>
