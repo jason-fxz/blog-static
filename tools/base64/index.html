@@ -2,63 +2,272 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 加密、解密</title>
-    <script src="./base64.js"></script>
-    <!-- MDUI CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
-        integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous" />
-    <title>Hello, world!</title>
-    <!-- MDUI JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
-        integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
-        crossorigin="anonymous"></script>
-    <script>
-        // alert(Base64.encode("ssss"))
-        function base64_encode() {
-            cl = document.getElementById("cleartext");
-            ci = document.getElementById("ciphertext");
-            ci.value = Base64.encode(cl.value)
-        }
-        function base64_decode() {
-            cl = document.getElementById("cleartext");
-            ci = document.getElementById("ciphertext");
-            if (Base64.isValid(ci.value)) {
-                cl.value = Base64.decode(ci.value)
-            } else {
-                mdui.alert("输入不合法！");
-            }
-        }
-    </script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Base64 加密、解密</title>
+  <script src="./base64.js"></script>
+  <!-- MDUI CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
+    integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous" />
+  <title>Hello, world!</title>
+  <script>
+    // alert(Base64.encode("ssss"))
+    function base64_encode() {
+      cl = document.getElementById("cleartext");
+      ci = document.getElementById("ciphertext");
+      ci.value = Base64.encode(cl.value);
+    }
+    function base64_decode() {
+      cl = document.getElementById("cleartext");
+      ci = document.getElementById("ciphertext");
+      if (Base64.isValid(ci.value)) {
+        cl.value = Base64.decode(ci.value);
+      } else {
+        mdui.alert("输入不合法！");
+      }
+    }
+  </script>
 </head>
 
-<body>
-    <div>
-        <div class="mdui-container">
-
-            <div class="mdui-typo">
-                <h1>Base64 编码、解码</h1>
-                <div class="mdui-divider"></div>
-                <br />
-            </div>
-            <div class="mdui-textfield mdui-ripple">
-                <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="明文" id="cleartext"></textarea>
-            </div>
-            <div class="mdui-textfield mdui-ripple">
-                <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="密文" id="ciphertext"></textarea>
-            </div>
-            <div class="mdui-row-xs-2">
-                <div class="mdui-col">
-                    <button class="mdui-btn mdui-btn-block mdui-color-purple mdui-ripple mdui-btn-raised" onclick="base64_encode()">ENCODE</button>
-                </div>
-                <div class="mdui-col">
-                    <button class="mdui-btn mdui-btn-block mdui-color-purple mdui-ripple mdui-btn-raised" onclick="base64_decode()">DECODE</button>
-                </div>
-            </div>
-        </div>
+<body class="mdui-theme-primary-blue mdui-theme-accent-deep-purple">
+  <div class="mdui-container">
+    <div class="mdui-typo">
+      <h1>Base64 编码、解码</h1>
+      <div class="mdui-divider"></div>
+      <br />
     </div>
+    <div class="mdui-col-lg-6 mdui-col-sm-12">
+      <div class="mdui-textfield mdui-ripple">
+        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="明文" id="cleartext"></textarea>
+      </div>
+    </div>
+    <div class="mdui-col-lg-6 mdui-col-sm-12">
+      <div class="mdui-textfield mdui-ripple">
+        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="密文" id="ciphertext"></textarea>
+      </div>
+    </div>
+    <div class="mdui-row-xs-2">
+      <div class="mdui-col">
+        <button class="
+              mdui-btn
+              mdui-btn-block
+              mdui-color-theme-accent
+              mdui-ripple
+              mdui-btn-raised
+            " onclick="base64_encode()">
+          ENCODE
+        </button>
+      </div>
+      <div class="mdui-col">
+        <button class="
+              mdui-btn
+              mdui-btn-block
+              mdui-color-theme-accent
+              mdui-ripple
+              mdui-btn-raised
+            " onclick="base64_decode()">
+          DECODE
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mdui-container mdui-m-y-2">
+    <div class="mdui-panel" mdui-panel>
+      <div class="mdui-panel-item">
+        <div class="mdui-panel-item-header">
+          <div class="mdui-typo-title">Base64 简介</div>
+        </div>
+
+        <div class="mdui-panel-item-body">
+          <div class="mdui-typo">
+            Base64 编码要求把 3 个 8 位字节（3 × 8 = 24）转化为 4 个 6
+            位的字节（4 × 6 = 24），之后在 6 位的前面补两个 0，形成 8
+            位一个字节的形式。 如果剩下的字符不足 3 个字节，则用 0
+            填充，输出字符使用
+            “<code>=</code>”，因此编码后输出的文本末尾可能会出现 1 或 2 个
+            “<code>=</code>”。 为了保证所输出的编码位可读字符，Base64
+            制定了一个编码表，以便进行统一转换。编码表的大小为 2<sup>6</sup> =
+            64，这也是 Base64 名称的由来。
+            <hr />
+            <div class="mdui-table-fluid">
+              <table class="mdui-table mdui-table-hoverable">
+                <thead>
+                  <tr>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                    <th>码值</th>
+                    <th>字符</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0</td>
+                    <td>A</td>
+                    <td>8</td>
+                    <td>I</td>
+                    <td>16</td>
+                    <td>Q</td>
+                    <td>24</td>
+                    <td>Y</td>
+                    <td>32</td>
+                    <td>g</td>
+                    <td>40</td>
+                    <td>o</td>
+                    <td>48</td>
+                    <td>w</td>
+                    <td>56</td>
+                    <td>4</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>B</td>
+                    <td>9</td>
+                    <td>J</td>
+                    <td>17</td>
+                    <td>R</td>
+                    <td>25</td>
+                    <td>Z</td>
+                    <td>33</td>
+                    <td>h</td>
+                    <td>41</td>
+                    <td>p</td>
+                    <td>49</td>
+                    <td>x</td>
+                    <td>57</td>
+                    <td>5</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>C</td>
+                    <td>10</td>
+                    <td>K</td>
+                    <td>18</td>
+                    <td>S</td>
+                    <td>26</td>
+                    <td>a</td>
+                    <td>34</td>
+                    <td>i</td>
+                    <td>42</td>
+                    <td>q</td>
+                    <td>50</td>
+                    <td>y</td>
+                    <td>58</td>
+                    <td>6</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>D</td>
+                    <td>11</td>
+                    <td>L</td>
+                    <td>19</td>
+                    <td>T</td>
+                    <td>27</td>
+                    <td>b</td>
+                    <td>35</td>
+                    <td>j</td>
+                    <td>43</td>
+                    <td>r</td>
+                    <td>51</td>
+                    <td>z</td>
+                    <td>59</td>
+                    <td>7</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>E</td>
+                    <td>12</td>
+                    <td>M</td>
+                    <td>20</td>
+                    <td>U</td>
+                    <td>28</td>
+                    <td>c</td>
+                    <td>36</td>
+                    <td>k</td>
+                    <td>44</td>
+                    <td>s</td>
+                    <td>52</td>
+                    <td>0</td>
+                    <td>60</td>
+                    <td>8</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>F</td>
+                    <td>13</td>
+                    <td>N</td>
+                    <td>21</td>
+                    <td>V</td>
+                    <td>29</td>
+                    <td>d</td>
+                    <td>37</td>
+                    <td>l</td>
+                    <td>45</td>
+                    <td>t</td>
+                    <td>53</td>
+                    <td>1</td>
+                    <td>61</td>
+                    <td>9</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>G</td>
+                    <td>14</td>
+                    <td>O</td>
+                    <td>22</td>
+                    <td>W</td>
+                    <td>30</td>
+                    <td>e</td>
+                    <td>38</td>
+                    <td>m</td>
+                    <td>46</td>
+                    <td>u</td>
+                    <td>54</td>
+                    <td>2</td>
+                    <td>62</td>
+                    <td>+</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>H</td>
+                    <td>15</td>
+                    <td>P</td>
+                    <td>23</td>
+                    <td>X</td>
+                    <td>31</td>
+                    <td>f</td>
+                    <td>39</td>
+                    <td>n</td>
+                    <td>47</td>
+                    <td>v</td>
+                    <td>55</td>
+                    <td>3</td>
+                    <td>63</td>
+                    <td>/</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MDUI JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
+    integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
