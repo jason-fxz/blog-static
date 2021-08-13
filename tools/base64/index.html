@@ -7,29 +7,15 @@
   <title>Base64 加密、解密</title>
   <script src="./base64.js"></script>
   <!-- MDUI CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
-    integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.2/dist/css/mdui.min.css" 
+    integrity="sha256-HC/aPArtOc7yw62YcBzG24sJXjXJu0atujZh9a4LtUw=" crossorigin="anonymous">
   <title>Hello, world!</title>
-  <script>
-    // alert(Base64.encode("ssss"))
-    function base64_encode() {
-      cl = document.getElementById("cleartext");
-      ci = document.getElementById("ciphertext");
-      ci.value = Base64.encode(cl.value);
-    }
-    function base64_decode() {
-      cl = document.getElementById("cleartext");
-      ci = document.getElementById("ciphertext");
-      if (Base64.isValid(ci.value)) {
-        cl.value = Base64.decode(ci.value);
-      } else {
-        mdui.alert("输入不合法！");
-      }
-    }
-  </script>
 </head>
 
-<body class="mdui-theme-primary-blue mdui-theme-accent-deep-purple">
+<body class="mdui-theme-primary-purple mdui-theme-accent-deep-purple">
+  <div id="loading" class="mdui-spinner" style="position: fixed;
+  right: 15px;
+  top: 15px; "></div>
   <div class="mdui-container">
     <div class="mdui-typo">
       <h1>Base64 编码、解码</h1>
@@ -38,12 +24,14 @@
     </div>
     <div class="mdui-col-lg-6 mdui-col-sm-12">
       <div class="mdui-textfield mdui-ripple">
-        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="明文" id="cleartext"></textarea>
+        <label class="mdui-textfield-label">明文</label>
+        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" id="cleartext"></textarea>
       </div>
     </div>
     <div class="mdui-col-lg-6 mdui-col-sm-12">
       <div class="mdui-textfield mdui-ripple">
-        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" placeholder="密文" id="ciphertext"></textarea>
+        <label class="mdui-textfield-label">密文</label>
+        <textarea class="mdui-textfield-input mdui-m-a-1" rows="8" id="ciphertext"></textarea>
       </div>
     </div>
     <div class="mdui-row-xs-2">
@@ -265,9 +253,37 @@
     </div>
   </div>
   <!-- MDUI JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
-    integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
+  <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.2/dist/js/mdui.min.js" 
+    integrity="sha256-pQMhrt4i+xYuZzfKboXTE2lnXDccZ8qI2Fh8gyGtX6Q="
     crossorigin="anonymous"></script>
+    <script>
+      var $ = mdui.$;
+      cl = document.getElementById("cleartext");
+      ci = document.getElementById("ciphertext");
+      window.onload = () => {
+        $('#loading').hide();
+      }
+      function base64_encode() {
+        setTimeout(() => {
+          ci.value = Base64.encode(cl.value);
+          $('#loading').hide();
+        }, 0);
+        console.log("encode");
+        $('#loading').show();
+      }
+      function base64_decode() {
+        setTimeout(() => {
+          if (Base64.isValid(ci.value)) {
+            cl.value = Base64.decode(ci.value);
+          } else {
+            mdui.alert("输入不合法！");
+          }
+          $('#loading').hide();
+        }, 0);
+        console.log("decode");
+        $('#loading').show();
+      }
+    </script>
 </body>
 
 </html>
