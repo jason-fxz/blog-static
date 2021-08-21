@@ -267,7 +267,7 @@
         setTimeout(() => {
           ci.value = Base64.encode(cl.value);
           $('#loading').hide();
-        }, 0);
+        }, 200);
         console.log("encode");
         $('#loading').show();
       }
@@ -279,7 +279,7 @@
             mdui.alert("输入不合法！");
           }
           $('#loading').hide();
-        }, 0);
+        }, 200);
         console.log("decode");
         $('#loading').show();
       }
